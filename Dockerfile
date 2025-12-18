@@ -9,8 +9,16 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++
 
 # 启用 Corepack + 固定 Yarn 3.6.1
-RUN corepack enable \
-  && corepack prepare yarn@3.6.1 --activate
+RUN corepack enable && corepack prepare yarn@3.6.1 --activate
+
+# 清理旧缓存（新增）
+RUN yarn cache clean || true
+
+# 检查 Yarn 版本
+RUN yarn --version
+
+# 检查依赖目录
+RUN ls node_modules/.yarn
 
 # ========== 依赖安装层（仅 yarn 配置变更时执行）==========
 # 先复制 Yarn 配置文件（缓存关键：这些文件不变则不重装依赖）
@@ -38,6 +46,8 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.yarn ./.yarn
+COPY --from=builder /app/.yarnrc.yml ./
 
 # 设置环境变量
 ENV NODE_ENV=production
