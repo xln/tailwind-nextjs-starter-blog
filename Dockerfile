@@ -23,7 +23,7 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn
 
 # 安装依赖（仅上面的配置文件变更时，才重新安装）
-RUN yarn install --immutable
+RUN yarn install
 
 # ========== 项目构建层（代码变更时执行）==========
 # 复制项目文件（代码变更才会触发这层及之后的重建）
