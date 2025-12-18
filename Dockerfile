@@ -8,8 +8,9 @@ WORKDIR /app
 # 安装系统依赖（仅第一次构建/基础镜像更新时执行）
 RUN apk add --no-cache python3 make g++
 
-# 安装 yarn（仅 corepack 指令变更时执行）
-RUN corepack enable && corepack prepare yarn@stable --activate
+# 启用 Corepack + 固定 Yarn 3.6.1
+RUN corepack enable \
+  && corepack prepare yarn@3.6.1 --activate
 
 # ========== 依赖安装层（仅 yarn 配置变更时执行）==========
 # 先复制 Yarn 配置文件（缓存关键：这些文件不变则不重装依赖）
@@ -46,4 +47,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # 启动命令
-CMD ["yarn", "serve"]
+CMD ["npm", "serve"]
