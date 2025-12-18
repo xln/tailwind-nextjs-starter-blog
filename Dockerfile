@@ -4,14 +4,18 @@ FROM node:20-alpine AS builder
 # 设置工作目录
 WORKDIR /app
 
+# 安装系统依赖
+RUN apk add --no-cache python3 make g++
+
 # 安装 yarn
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# 复制 package.json 和 yarn.lock
-COPY package.json yarn.lock ./
+# 复制 Yarn 配置文件（如果是 Yarn v2+）
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
 
 # 安装依赖
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 # 复制项目文件
 COPY . .
