@@ -4,6 +4,9 @@ FROM node:20-alpine AS builder
 # 设置工作目录
 WORKDIR /app
 
+# 安装 yarn
+RUN corepack enable && corepack prepare yarn@stable --activate
+
 # 复制 package.json 和 yarn.lock
 COPY package.json yarn.lock ./
 
