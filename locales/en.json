@@ -1,0 +1,25 @@
+{
+  "common": {
+    "latest": "Latest",
+    "menu":{
+      "home": "Home",
+      "blog": "Blog",
+      "tags": "Tags",
+      "projects": "Projects",
+      "about": "About"
+    },
+    "page":{
+      "prev":"Previous",
+      "next":"Next",
+      "of":"of"
+    },
+    "setting":{
+      "theme":{
+        "light":"Light",
+        "dark":"Dark",
+        "system":"System"
+      }
+    },
+    "all_posts":"All Posts"
+  }
+}

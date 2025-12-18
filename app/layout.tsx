@@ -10,8 +10,8 @@ import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
+import { NextIntlClientProvider } from 'next-intl'
 import { Metadata } from 'next'
-
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
@@ -57,10 +57,11 @@ export const metadata: Metadata = {
     images: [siteMetadata.socialBanner],
   },
 }
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+interface RootLayoutProps {
+  children: React.ReactNode
+}
+export default async function RootLayout({ children }: RootLayoutProps) {
   const basePath = process.env.BASE_PATH || ''
-
   return (
     <html
       lang={siteMetadata.language}
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+        <NextIntlClientProvider>
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>
@@ -105,6 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </SectionContainer>
         </ThemeProviders>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

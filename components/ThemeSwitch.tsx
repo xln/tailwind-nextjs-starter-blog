@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 import {
   Menu,
   MenuButton,
@@ -55,6 +56,7 @@ const Monitor = () => (
 const Blank = () => <svg className="h-6 w-6" />
 
 const ThemeSwitch = () => {
+  const t = useTranslations('common')
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
 
@@ -90,7 +92,7 @@ const ThemeSwitch = () => {
                         <div className="mr-2">
                           <Sun />
                         </div>
-                        Light
+                        {t('setting.theme.light')}
                       </button>
                     )}
                   </MenuItem>
@@ -106,7 +108,7 @@ const ThemeSwitch = () => {
                         <div className="mr-2">
                           <Moon />
                         </div>
-                        Dark
+                        {t('setting.theme.dark')}
                       </button>
                     )}
                   </MenuItem>
@@ -122,7 +124,7 @@ const ThemeSwitch = () => {
                         <div className="mr-2">
                           <Monitor />
                         </div>
-                        System
+                        {t('setting.theme.system')}
                       </button>
                     )}
                   </MenuItem>
