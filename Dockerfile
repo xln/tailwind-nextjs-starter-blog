@@ -17,9 +17,6 @@ RUN yarn cache clean || true
 # 检查 Yarn 版本
 RUN yarn --version
 
-# 检查依赖目录
-RUN ls node_modules/.yarn
-
 # ========== 依赖安装层（仅 yarn 配置变更时执行）==========
 # 先复制 Yarn 配置文件（缓存关键：这些文件不变则不重装依赖）
 COPY package.json yarn.lock .yarnrc.yml ./
