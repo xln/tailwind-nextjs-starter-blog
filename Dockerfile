@@ -46,4 +46,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # 启动命令
-CMD ["yarn", "start"]
+CMD ["yarn", "serve"]
