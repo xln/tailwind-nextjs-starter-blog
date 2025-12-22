@@ -5,11 +5,10 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
-import { useTranslations,useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 const Header = () => {
   const t = useTranslations('common')
-  const locale = useLocale() // 'zh' | 'en'
   let headerClass = 'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-10'
   if (siteMetadata.stickyNav) {
     headerClass += ' sticky top-0 z-50'
@@ -35,18 +34,15 @@ const Header = () => {
         <div className="no-scrollbar hidden max-w-40 items-center gap-x-4 overflow-x-auto sm:flex md:max-w-72 lg:max-w-96">
           {headerNavLinks
             .filter((link) => link.href !== '/')
-            .map((link) => {
-              if( link.title=== 'about'&& link.href.includes('?lang=')===false ){
-                link.href += '?lang=' + locale
-              }
-              return <Link
+            .map((link) => (
+              <Link
                 key={link.title}
                 href={link.href}
                 className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 dark:text-gray-100"
               >
                 {t(`menu.${link.title}`)}
               </Link>
-            })}
+            ))}
         </div>
         <SearchButton />
         <ThemeSwitch />
