@@ -14,16 +14,13 @@ RUN corepack enable && corepack prepare yarn@3.6.1 --activate
 # 清理旧缓存（新增）
 RUN yarn cache clean || true
 
-# 检查 Yarn 版本
-RUN yarn --version
-
 # ========== 依赖安装层（仅 yarn 配置变更时执行）==========
 # 先复制 Yarn 配置文件（缓存关键：这些文件不变则不重装依赖）
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn
 
 # 安装依赖（仅上面的配置文件变更时，才重新安装）
-RUN yarn install
+RUN yarn install --immutable --inline-builds --check-cache
 
 # ========== 项目构建层（代码变更时执行）==========
 # 复制项目文件（代码变更才会触发这层及之后的重建）
@@ -40,6 +37,7 @@ WORKDIR /app
 
 # 复制构建产物和依赖
 COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
