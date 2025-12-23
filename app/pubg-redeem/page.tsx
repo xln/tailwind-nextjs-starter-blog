@@ -85,11 +85,14 @@ export default function PUBGForm() {
     }
 
     try {
-      const res = await fetch('http://0.0.0.0:5678/webhook/redeem-pubg', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+      const res = await fetch(
+        `http://${process.env.NODE_ENV === 'development' ? '0.0.0.0' : '183.87.134.0'}:5678/webhook/redeem-pubg`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }
+      )
       const data = await res.json()
       setResult(data)
     } catch (err) {
