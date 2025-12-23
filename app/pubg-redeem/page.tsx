@@ -227,13 +227,15 @@ export default function PUBGForm() {
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() => setAccounts([...accounts, { nickname: '', focToken: '' }])}
-            className="rounded bg-green-500 px-3 py-1 text-white"
-          >
-            添加账号
-          </button>
+          {!showAccountJson && (
+            <button
+              type="button"
+              onClick={() => setAccounts([...accounts, { nickname: '', focToken: '' }])}
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              添加账号
+            </button>
+          )}
         </div>
 
         {/* CDK 列表 */}
@@ -313,13 +315,15 @@ export default function PUBGForm() {
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() => setCdks([...cdks, { label: '', value: '' }])}
-            className="rounded bg-green-500 px-3 py-1 text-white"
-          >
-            添加 CDK
-          </button>
+          {!showCdkJson && (
+            <button
+              type="button"
+              onClick={() => setCdks([...cdks, { label: '', value: '' }])}
+              className="rounded bg-green-500 px-3 py-1 text-white"
+            >
+              添加 CDK
+            </button>
+          )}
         </div>
 
         {errorList.length > 0 && (
