@@ -65,6 +65,10 @@ export default [
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
+      // ✅ 允许 any（后台工具/数据流场景非常常见）
+      '@typescript-eslint/no-explicit-any': 'off',
+      // ✅ 关闭 label 必须绑定（React 表单里很常见）
+      'jsx-a11y/label-has-associated-control': 'off',
     },
   },
 ]

@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 import RedeemResultList from '@/components/RedeemResultList'
 
-type Account = { nickname: string; focToken: string; error?: { nickname?: boolean; focToken?: boolean } }
+type Account = {
+  nickname: string
+  focToken: string
+  error?: { nickname?: boolean; focToken?: boolean }
+}
 type CDK = { label: string; value: string; error?: { label?: boolean; value?: boolean } }
 
 export default function PUBGForm() {
-  const [accounts, setAccounts] = useState<Account[]>([
-    { nickname: "", focToken: "" },
-  ])
-  const [cdks, setCdks] = useState<CDK[]>([
-    { label: "", value: "" },
-  ])
-  const [mode, setMode] = useState<"sequential" | "concurrent">("sequential")
+  const [accounts, setAccounts] = useState<Account[]>([{ nickname: '', focToken: '' }])
+  const [cdks, setCdks] = useState<CDK[]>([{ label: '', value: '' }])
+  const [mode, setMode] = useState<'sequential' | 'concurrent'>('sequential')
   const [concurrentLimit, setConcurrentLimit] = useState(2)
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -21,8 +21,8 @@ export default function PUBGForm() {
 
   const [showAccountJson, setShowAccountJson] = useState(false)
   const [showCdkJson, setShowCdkJson] = useState(false)
-  const [accountJsonInput, setAccountJsonInput] = useState("")
-  const [cdkJsonInput, setCdkJsonInput] = useState("")
+  const [accountJsonInput, setAccountJsonInput] = useState('')
+  const [cdkJsonInput, setCdkJsonInput] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,21 +63,15 @@ export default function PUBGForm() {
       const errors: string[] = []
 
       newAccounts.forEach((acc, i) => {
-        if (acc.error?.nickname)
-          errors.push(`账号列表的第 ${i + 1} 行：请填写昵称`)
+        if (acc.error?.nickname) errors.push(`账号列表的第 ${i + 1} 行：请填写昵称`)
         if (acc.error?.focToken)
-          errors.push(
-            `账号列表的第 ${i + 1} 行：${acc.nickname || "昵称未填"} 的 FOC Token 未填写`
-          )
+          errors.push(`账号列表的第 ${i + 1} 行：${acc.nickname || '昵称未填'} 的 FOC Token 未填写`)
       })
 
       newCdks.forEach((cdk, i) => {
-        if (cdk.error?.label)
-          errors.push(`CDK列表的第 ${i + 1} 行：请填写 CDK 名称`)
+        if (cdk.error?.label) errors.push(`CDK列表的第 ${i + 1} 行：请填写 CDK 名称`)
         if (cdk.error?.value)
-          errors.push(
-            `CDK列表的第 ${i + 1} 行：${cdk.label || "CDK名称未填"} 的 CDK 值未填写`
-          )
+          errors.push(`CDK列表的第 ${i + 1} 行：${cdk.label || 'CDK名称未填'} 的 CDK 值未填写`)
       })
 
       setErrorList(errors)
@@ -86,19 +80,16 @@ export default function PUBGForm() {
 
     setLoading(true)
     const payload: any = { accounts, cdks, mode }
-    if (mode === "concurrent") {
+    if (mode === 'concurrent') {
       payload.concurrentLimit = concurrentLimit
     }
 
     try {
-      const res = await fetch(
-        "http://0.0.0.0:5678/webhook/redeem-pubg",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      )
+      const res = await fetch('http://0.0.0.0:5678/webhook/redeem-pubg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
       const data = await res.json()
       setResult(data)
     } catch (err) {
@@ -108,50 +99,48 @@ export default function PUBGForm() {
     }
   }
 
-  const handleImportJson = (type: "accounts" | "cdks") => {
+  const handleImportJson = (type: 'accounts' | 'cdks') => {
     try {
-      const parsed = JSON.parse(
-        type === "accounts" ? accountJsonInput : cdkJsonInput
-      )
-      if (!Array.isArray(parsed)) throw new Error("必须是数组")
-      if (type === "accounts") {
+      const parsed = JSON.parse(type === 'accounts' ? accountJsonInput : cdkJsonInput)
+      if (!Array.isArray(parsed)) throw new Error('必须是数组')
+      if (type === 'accounts') {
         setAccounts(parsed)
-        setAccountJsonInput("")
+        setAccountJsonInput('')
         setShowAccountJson(false)
       } else {
         setCdks(parsed)
-        setCdkJsonInput("")
+        setCdkJsonInput('')
         setShowCdkJson(false)
       }
     } catch (err) {
-      alert("解析失败: " + (err as Error).message)
+      alert('解析失败: ' + (err as Error).message)
     }
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-6">
       <h1 className="text-2xl font-bold">PUBG CDK 批量兑换</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
-          <label className="block font-medium mb-1">模式</label>
+          <label className="mb-1 block font-medium">模式</label>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as any)}
-            className="border rounded p-2 w-full"
+            className="w-full rounded border p-2"
           >
             <option value="sequential">顺序兑换</option>
             {/* <option value="concurrent">并发兑换</option> */}
           </select>
         </div>
 
-        {mode === "concurrent" && (
+        {mode === 'concurrent' && (
           <div>
-            <label className="block font-medium mb-1">并发限制</label>
+            <label className="mb-1 block font-medium">并发限制</label>
             <input
               type="number"
               value={concurrentLimit}
               onChange={(e) => setConcurrentLimit(Number(e.target.value))}
-              className="border rounded p-2 w-full"
+              className="w-full rounded border p-2"
               min={1}
             />
           </div>
@@ -159,37 +148,41 @@ export default function PUBGForm() {
 
         {/* 账号列表 */}
         <div>
-          <div className="flex justify-between items-center mb-1">
+          <div className="mb-1 flex items-center justify-between">
             <label className="block font-medium">账号列表</label>
-            {!showAccountJson &&<button
-              type="button"
-              className="text-blue-500 underline text-sm"
-              onClick={() => setShowAccountJson(!showAccountJson)}
-            >
-              导入账号JSON
-            </button>}
-            {showAccountJson && <div className="flex gap-2 mt-1">
+            {!showAccountJson && (
+              <button
+                type="button"
+                className="text-sm text-blue-500 underline"
+                onClick={() => setShowAccountJson(!showAccountJson)}
+              >
+                导入账号JSON
+              </button>
+            )}
+            {showAccountJson && (
+              <div className="mt-1 flex gap-2">
                 <button
                   type="button"
-                  className="bg-gray-300 px-3 py-1 rounded"
+                  className="rounded bg-gray-300 px-3 py-1"
                   onClick={() => setShowAccountJson(false)}
                 >
                   关闭
                 </button>
                 <button
                   type="button"
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleImportJson("accounts")}
+                  className="rounded bg-green-500 px-3 py-1 text-white"
+                  onClick={() => handleImportJson('accounts')}
                 >
                   导入
                 </button>
-              </div>}
+              </div>
+            )}
           </div>
 
           {showAccountJson && (
             <div className="mb-2">
               <textarea
-                className="border rounded p-2 w-full h-32"
+                className="h-32 w-full rounded border p-2"
                 value={accountJsonInput}
                 onChange={(e) => setAccountJsonInput(e.target.value)}
                 placeholder='粘贴 JSON 数组，如 [{"nickname":"xxx","focToken":"xxx"}]'
@@ -198,7 +191,7 @@ export default function PUBGForm() {
           )}
 
           {accounts.map((acc, i) => (
-            <div key={i} className="flex gap-2 mb-2">
+            <div key={i} className="mb-2 flex gap-2">
               <input
                 type="text"
                 placeholder="昵称"
@@ -208,8 +201,8 @@ export default function PUBGForm() {
                   newAccounts[i].nickname = e.target.value
                   setAccounts(newAccounts)
                 }}
-                className={`border rounded p-2 flex-1 ${
-                  acc.error?.nickname ? "border-red-500" : ""
+                className={`flex-1 rounded border p-2 ${
+                  acc.error?.nickname ? 'border-red-500' : ''
                 }`}
               />
               <input
@@ -221,16 +214,14 @@ export default function PUBGForm() {
                   newAccounts[i].focToken = e.target.value
                   setAccounts(newAccounts)
                 }}
-                className={`border rounded p-2 flex-2 ${
-                  acc.error?.focToken ? "border-red-500" : ""
+                className={`flex-2 rounded border p-2 ${
+                  acc.error?.focToken ? 'border-red-500' : ''
                 }`}
               />
               <button
                 type="button"
-                onClick={() =>
-                  setAccounts(accounts.filter((_, idx) => idx !== i))
-                }
-                className="bg-red-500 text-white px-2 rounded"
+                onClick={() => setAccounts(accounts.filter((_, idx) => idx !== i))}
+                className="rounded bg-red-500 px-2 text-white"
               >
                 删除
               </button>
@@ -238,10 +229,8 @@ export default function PUBGForm() {
           ))}
           <button
             type="button"
-            onClick={() =>
-              setAccounts([...accounts, { nickname: "", focToken: "" }])
-            }
-            className="bg-green-500 text-white px-3 py-1 rounded"
+            onClick={() => setAccounts([...accounts, { nickname: '', focToken: '' }])}
+            className="rounded bg-green-500 px-3 py-1 text-white"
           >
             添加账号
           </button>
@@ -249,38 +238,41 @@ export default function PUBGForm() {
 
         {/* CDK 列表 */}
         <div>
-          <div className="flex justify-between items-center mb-1">
+          <div className="mb-1 flex items-center justify-between">
             <label className="block font-medium">CDK 列表</label>
-            {!showCdkJson && <button
-              type="button"
-              className="text-blue-500 underline text-sm"
-              onClick={() => setShowCdkJson(!showCdkJson)}
-            >
-              导入CDK JSON
-            </button>}
-            {showCdkJson &&
-              <div className="flex gap-2 mt-1">
+            {!showCdkJson && (
+              <button
+                type="button"
+                className="text-sm text-blue-500 underline"
+                onClick={() => setShowCdkJson(!showCdkJson)}
+              >
+                导入CDK JSON
+              </button>
+            )}
+            {showCdkJson && (
+              <div className="mt-1 flex gap-2">
                 <button
                   type="button"
-                  className="bg-gray-300 px-3 py-1 rounded"
+                  className="rounded bg-gray-300 px-3 py-1"
                   onClick={() => setShowCdkJson(false)}
                 >
                   关闭
                 </button>
                 <button
                   type="button"
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleImportJson("cdks")}
+                  className="rounded bg-green-500 px-3 py-1 text-white"
+                  onClick={() => handleImportJson('cdks')}
                 >
                   导入
                 </button>
-              </div>}
+              </div>
+            )}
           </div>
 
           {showCdkJson && (
             <div className="mb-2">
               <textarea
-                className="border rounded p-2 w-full h-32"
+                className="h-32 w-full rounded border p-2"
                 value={cdkJsonInput}
                 onChange={(e) => setCdkJsonInput(e.target.value)}
                 placeholder='粘贴 JSON 数组，如 [{"label":"xxx","value":"xxx"}]'
@@ -289,7 +281,7 @@ export default function PUBGForm() {
           )}
 
           {cdks.map((cdk, i) => (
-            <div key={i} className="flex gap-2 mb-2">
+            <div key={i} className="mb-2 flex gap-2">
               <input
                 type="text"
                 placeholder="标签"
@@ -299,9 +291,7 @@ export default function PUBGForm() {
                   newCdks[i].label = e.target.value
                   setCdks(newCdks)
                 }}
-                className={`border rounded p-2 flex-1 ${
-                  cdk.error?.label ? "border-red-500" : ""
-                }`}
+                className={`flex-1 rounded border p-2 ${cdk.error?.label ? 'border-red-500' : ''}`}
               />
               <input
                 type="text"
@@ -312,14 +302,12 @@ export default function PUBGForm() {
                   newCdks[i].value = e.target.value
                   setCdks(newCdks)
                 }}
-                className={`border rounded p-2 flex-2 ${
-                  cdk.error?.value ? "border-red-500" : ""
-                }`}
+                className={`flex-2 rounded border p-2 ${cdk.error?.value ? 'border-red-500' : ''}`}
               />
               <button
                 type="button"
                 onClick={() => setCdks(cdks.filter((_, idx) => idx !== i))}
-                className="bg-red-500 text-white px-2 rounded"
+                className="rounded bg-red-500 px-2 text-white"
               >
                 删除
               </button>
@@ -327,15 +315,15 @@ export default function PUBGForm() {
           ))}
           <button
             type="button"
-            onClick={() => setCdks([...cdks, { label: "", value: "" }])}
-            className="bg-green-500 text-white px-3 py-1 rounded"
+            onClick={() => setCdks([...cdks, { label: '', value: '' }])}
+            className="rounded bg-green-500 px-3 py-1 text-white"
           >
             添加 CDK
           </button>
         </div>
 
         {errorList.length > 0 && (
-          <div className="p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="rounded border border-red-400 bg-red-100 p-2 text-red-700">
             {errorList.map((err, idx) => (
               <div key={idx}>{err}</div>
             ))}
@@ -344,16 +332,14 @@ export default function PUBGForm() {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
           disabled={loading}
         >
-          {loading ? "兑换中..." : "提交"}
+          {loading ? '兑换中...' : '提交'}
         </button>
       </form>
 
-      {result && (
-        <RedeemResultList results={result} />
-      )}
+      {result && <RedeemResultList results={result} />}
       {/* {result && (
         <div className="mt-6 p-4 border rounded bg-gray-50 overflow-auto max-h-96">
           <pre className="text-sm">{JSON.stringify(result, null, 2)}</pre>
