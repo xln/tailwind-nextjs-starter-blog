@@ -27,7 +27,8 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -o StrictHostKeyChecking=no \
+            -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
             "bash /home/admin/projects/deploy.sh"
