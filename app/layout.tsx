@@ -95,7 +95,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body className="relative overflow-x-hidden bg-white text-black antialiased dark:bg-gray-950 dark:text-white">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] opacity-60 [background:radial-gradient(ellipse_at_top,rgba(139,92,246,0.18),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.14),transparent_55%),radial-gradient(ellipse_at_top_left,rgba(236,72,153,0.12),transparent_55%)] dark:opacity-40"
+        />
         <NextIntlClientProvider>
           <ThemeProviders>
             <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />

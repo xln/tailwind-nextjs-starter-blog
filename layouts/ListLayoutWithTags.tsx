@@ -10,6 +10,8 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
 import { useTranslations } from 'next-intl'
+import { FadeIn, StaggerGroup, StaggerItem } from '@/components/Motion'
+import AnimatedBadge from '@/components/AnimatedBadge'
 
 interface PaginationProps {
   totalPages: number
@@ -28,43 +30,46 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
   const segments = pathname.split('/')
   const lastSegment = segments[segments.length - 1]
   const basePath = pathname
-    .replace(/^\//, '') // Remove leading slash
-    .replace(/\/page\/\d+\/?$/, '') // Remove any trailing /page
-    .replace(/\/$/, '') // Remove trailing slash
+    .replace(/^\//, '')
+    .replace(/\/page\/\d+\/?$/, '')
+    .replace(/\/$/, '')
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
 
   return (
-    <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-      <nav className="flex justify-between">
-        {!prevPage && (
-          <button className="cursor-auto disabled:opacity-50" disabled={!prevPage}>
-            {t('page.prev')}
-          </button>
-        )}
-        {prevPage && (
-          <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
-          >
-            {t('page.prev')}
-          </Link>
-        )}
-        <span>
-          {currentPage} {t('page.of')} {totalPages}
+    <nav className="mt-10 flex items-center justify-between">
+      {!prevPage && (
+        <span className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 opacity-50 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+          ← {t('page.prev')}
         </span>
-        {!nextPage && (
-          <button className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
-            {t('page.next')}
-          </button>
-        )}
-        {nextPage && (
-          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
-            {t('page.next')}
-          </Link>
-        )}
-      </nav>
-    </div>
+      )}
+      {prevPage && (
+        <Link
+          href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
+          rel="prev"
+          className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-300 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm transition hover:-translate-y-0.5 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+        >
+          ← {t('page.prev')}
+        </Link>
+      )}
+      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+        {currentPage} {t('page.of')} {totalPages}
+      </span>
+      {!nextPage && (
+        <span className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 opacity-50 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+          {t('page.next')} →
+        </span>
+      )}
+      {nextPage && (
+        <Link
+          href={`/${basePath}/page/${currentPage + 1}`}
+          rel="next"
+          className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-300 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm transition hover:-translate-y-0.5 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+        >
+          {t('page.next')} →
+        </Link>
+      )}
+    </nav>
   )
 }
 
@@ -84,88 +89,105 @@ export default function ListLayoutWithTags({
 
   return (
     <>
-      <div>
+      <FadeIn>
         <div className="pt-6 pb-6">
-          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+          <AnimatedBadge>{title}</AnimatedBadge>
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl md:text-6xl md:leading-tight dark:text-white">
             {title}
           </h1>
         </div>
-        <div className="flex sm:space-x-24">
-          <div className="hidden h-full max-h-screen max-w-[280px] min-w-[280px] flex-wrap overflow-auto rounded-sm bg-gray-50 pt-5 shadow-md sm:flex dark:bg-gray-900/70 dark:shadow-gray-800/40">
-            <div className="px-6 py-4">
-              {pathname.startsWith('/blog') ? (
-                <h3 className="text-primary-500 font-bold uppercase">{t('all_posts')}</h3>
-              ) : (
-                <Link
-                  href={`/blog`}
-                  className="hover:text-primary-500 dark:hover:text-primary-500 font-bold text-gray-700 uppercase dark:text-gray-300"
-                >
-                  {t('all_posts')}
-                </Link>
-              )}
-              <ul>
-                {sortedTags.map((t) => {
-                  return (
-                    <li key={t} className="my-3">
-                      {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
-                        <h3 className="text-primary-500 inline px-3 py-2 text-sm font-bold uppercase">
-                          {`${t} (${tagCounts[t]})`}
-                        </h3>
-                      ) : (
-                        <Link
-                          href={`/tags/${slug(t)}`}
-                          className="hover:text-primary-500 dark:hover:text-primary-500 px-3 py-2 text-sm font-medium text-gray-500 uppercase dark:text-gray-300"
-                          aria-label={`View posts tagged ${t}`}
-                        >
-                          {`${t} (${tagCounts[t]})`}
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          </div>
-          <div>
-            <ul>
-              {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
-                return (
-                  <li key={path} className="py-5">
-                    <article className="flex flex-col space-y-2 xl:space-y-0">
+      </FadeIn>
+      <div className="flex gap-10">
+        <aside className="hidden h-fit max-h-[80vh] w-[260px] flex-shrink-0 overflow-auto rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm sm:block dark:border-gray-800 dark:bg-gray-900/60">
+          {pathname.startsWith('/blog') ? (
+            <span className="bg-primary-500/10 text-primary-600 dark:text-primary-300 inline-flex items-center rounded-full px-3 py-1 text-sm font-bold uppercase">
+              {t('all_posts')}
+            </span>
+          ) : (
+            <Link
+              href={`/blog`}
+              className="hover:text-primary-600 dark:hover:text-primary-300 inline-flex items-center rounded-full px-3 py-1 text-sm font-bold text-gray-700 uppercase transition dark:text-gray-300"
+            >
+              {t('all_posts')}
+            </Link>
+          )}
+          <ul className="mt-4 space-y-2">
+            {sortedTags.map((tag) => {
+              const isActive = decodeURI(pathname.split('/tags/')[1]) === slug(tag)
+              return (
+                <li key={tag}>
+                  {isActive ? (
+                    <span className="bg-primary-500/10 text-primary-600 dark:text-primary-300 inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold uppercase">
+                      {`${tag} (${tagCounts[tag]})`}
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/tags/${slug(tag)}`}
+                      className="hover:bg-primary-500/10 hover:text-primary-600 dark:hover:text-primary-300 inline-flex items-center rounded-full px-3 py-1 text-sm font-medium text-gray-600 uppercase transition dark:text-gray-300"
+                      aria-label={`View posts tagged ${tag}`}
+                    >
+                      {`${tag} (${tagCounts[tag]})`}
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        </aside>
+        <StaggerGroup className="min-w-0 flex-1">
+          <ul className="space-y-8 pt-2">
+            {!displayPosts.length && (
+              <li className="py-10 text-center text-gray-500 dark:text-gray-400">
+                No posts found.
+              </li>
+            )}
+            {displayPosts.map((post) => {
+              const { path, date, title: postTitle, summary, tags } = post
+              return (
+                <li key={path} className="group">
+                  <StaggerItem>
+                    <article className="space-y-3 rounded-2xl p-4 transition hover:bg-white/50 dark:hover:bg-gray-900/60">
                       <dl>
                         <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                        <dd className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           <time dateTime={date} suppressHydrationWarning>
                             {formatDate(date, siteMetadata.locale)}
                           </time>
                         </dd>
                       </dl>
-                      <div className="space-y-3">
-                        <div>
-                          <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                            <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
-                              {title}
-                            </Link>
-                          </h2>
-                          <div className="flex flex-wrap">
-                            {tags?.map((tag) => <Tag key={tag} text={tag} />)}
-                          </div>
-                        </div>
-                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                          {summary}
+                      <div>
+                        <h2 className="text-2xl font-bold tracking-tight">
+                          <Link
+                            href={`/${path}`}
+                            className="hover:text-primary-600 dark:hover:text-primary-400 text-gray-900 transition dark:text-gray-100"
+                          >
+                            {postTitle}
+                          </Link>
+                        </h2>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {tags?.map((tag) => <Tag key={tag} text={tag} />)}
                         </div>
                       </div>
+                      <p className="prose max-w-none text-gray-600 dark:text-gray-300">{summary}</p>
+                      <div className="text-sm font-medium">
+                        <Link
+                          href={`/${path}`}
+                          className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 inline-flex items-center gap-1 transition"
+                          aria-label={`Read more: "${postTitle}"`}
+                        >
+                          Read more <span className="transition group-hover:translate-x-1">→</span>
+                        </Link>
+                      </div>
                     </article>
-                  </li>
-                )
-              })}
-            </ul>
-            {pagination && pagination.totalPages > 1 && (
-              <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-            )}
-          </div>
-        </div>
+                  </StaggerItem>
+                </li>
+              )
+            })}
+          </ul>
+          {pagination && pagination.totalPages > 1 && (
+            <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+          )}
+        </StaggerGroup>
       </div>
     </>
   )
