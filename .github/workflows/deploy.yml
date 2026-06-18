@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-# ⭐ 防重复部署（关键）
 concurrency:
   group: production
   cancel-in-progress: true
@@ -30,7 +29,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             admin@${{ secrets.SERVER_HOST }} \
-            "cd /home/admin/projects && \
-            ls -la && \
-            sed -i 's/\r$//' deploy.sh && \
-            bash -x deploy.sh"
+            "mkdir -p /home/admin/projects && cd /home/admin/projects && ls -la && sed -i 's/\r$//' deploy.sh && bash -x deploy.sh"
