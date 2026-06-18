@@ -30,4 +30,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "whoami && echo HOME=\$HOME && ls -la \$HOME"
+            'bash -c "whoami && echo HOME=$HOME && ls -la $HOME"'
