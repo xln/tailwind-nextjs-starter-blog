@@ -26,11 +26,11 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
-        env:
-          # 远程先清除脚本里Windows换行，再执行；加 bash -x 打印详细执行日志定位报错
-          REMOTE_CMD: cd /home/admin/projects && ls -la && sed -i 's/\r$//' deploy.sh && bash -x deploy.sh
         run: |
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             admin@${{ secrets.SERVER_HOST }} \
-            bash -c "$REMOTE_CMD"
+            "cd /home/admin/projects && \
+            ls -la && \
+            sed -i 's/\r$//' deploy.sh && \
+            bash -x deploy.sh"
