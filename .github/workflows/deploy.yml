@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+# ⭐ 防重复部署（关键）
 concurrency:
   group: production
   cancel-in-progress: true
@@ -17,10 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 修复本地仓库sh换行
-      - name: Fix shell line break
-        run: sed -i 's/\r$//' *.sh
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -28,17 +25,10 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      # 如果你有同步代码步骤保留，没有就删掉
-      # - name: Sync code to server
-      #   run: |
-      #     rsync -avz --delete \
-      #       -e "ssh -i ~/.ssh/id_ed25519" \
-      #       ./ \
-      #       admin@${{ secrets.SERVER_HOST }}:/home/admin/projects/
-
       - name: Deploy to Server
         env:
-          REMOTE_CMD: cd /home/admin/projects && ls -la && sed -i 's/\r$//' deploy.sh && bash deploy.sh
+          # 远程先清除脚本里Windows换行，再执行；加 bash -x 打印详细执行日志定位报错
+          REMOTE_CMD: cd /home/admin/projects && ls -la && sed -i 's/\r$//' deploy.sh && bash -x deploy.sh
         run: |
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
