@@ -26,8 +26,10 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
-        run: >-
-          ssh -o StrictHostKeyChecking=no
-          -i ~/.ssh/id_ed25519
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}
-          "bash -c 'cd ~/projects && whoami && pwd && ls -la && bash deploy.sh'"
+        env:
+          REMOTE_CMD: cd ~/projects && whoami && pwd && ls -la && bash deploy.sh
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            bash -c "$REMOTE_CMD"
