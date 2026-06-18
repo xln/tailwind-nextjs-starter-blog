@@ -32,4 +32,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            bash -c "$REMOTE_CMD"
+            bash -c "$REMOTE_CMD" 
