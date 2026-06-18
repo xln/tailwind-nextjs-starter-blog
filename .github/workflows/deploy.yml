@@ -27,7 +27,7 @@ jobs:
 
       - name: Deploy to Server
         env:
-          REMOTE_CMD: cd ~/projects && whoami && pwd && ls -la && bash deploy.sh
+          REMOTE_CMD: cd /home/admin/projects && whoami && pwd && ls -la && bash deploy.sh
         run: |
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
