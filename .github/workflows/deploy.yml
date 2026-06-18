@@ -30,4 +30,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            'bash -c "whoami && echo HOME=$HOME && ls -la $HOME"'
+            << 'EOF'
+          cd ~/projects && whoami && pwd && ls -la && bash deploy.sh
+          EOF
