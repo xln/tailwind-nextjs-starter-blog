@@ -25,10 +25,24 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to Server
+      - name: Deploy to Server (debug first)
         run: |
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "bash /home/admin/projects/deploy.sh"
+            "
+            echo '===== DEBUG INFO ====='
+            whoami
+            echo 'HOME:' \$HOME
+            pwd
+
+            echo '===== /home/admin/projects ====='
+            ls -la /home/admin/projects || true
+
+            echo '===== deploy.sh check ====='
+            ls -l /home/admin/projects/deploy.sh || true
+
+            echo '===== NOW RUN DEPLOY ====='
+            bash /home/admin/projects/deploy.sh
+            "
