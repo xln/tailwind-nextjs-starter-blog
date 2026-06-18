@@ -30,4 +30,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "cd /home/admin/projects && whoami && pwd && ls -la && bash deploy.sh"
+            "cd ~/projects && whoami && pwd && ls -la && bash deploy.sh"
