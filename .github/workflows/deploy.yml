@@ -31,18 +31,18 @@ jobs:
             -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            'bash -lc "
-              echo ===== DEBUG INFO =====
-              whoami
-              echo HOME: \$HOME
-              pwd
+            echo "===== DEBUG INFO ====="
+            whoami
+            echo "HOME: $HOME"
+            pwd
 
-              echo ===== PROJECT DIR =====
-              ls -la /home/admin/projects || true
+            echo "===== PROJECT DIR ====="
+            ls -la /home/admin/projects || true
 
-              echo ===== DEPLOY FILE =====
-              ls -l /home/admin/projects/deploy.sh || true
+            echo "===== DEPLOY FILE ====="
+            ls -l /home/admin/projects/deploy.sh || true
 
-              echo ===== RUN DEPLOY =====
-              bash /home/admin/projects/deploy.sh
-            "'
+            echo "===== RUN DEPLOY ====="
+            bash /home/admin/projects/deploy.sh
+
+            EOF
