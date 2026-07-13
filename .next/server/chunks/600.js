@@ -1,0 +1,1 @@
+"use strict";exports.id=600,exports.ids=[600],exports.modules={33600:t=>{t.exports=JSON.parse('{"common":{"latest":"最近更新","menu":{"home":"首页","blog":"文章","tags":"标签","projects":"项目","about":"关于我"},"page":{"prev":"上一页","next":"下一页","of":"/"},"setting":{"theme":{"light":"浅色","dark":"深色","system":"自动"}},"back_to_the_blog":"返回文章列表","all_posts":"所有文章"}}')}};

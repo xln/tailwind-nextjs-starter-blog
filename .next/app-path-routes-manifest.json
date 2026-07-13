@@ -1,0 +1,16 @@
+{
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/api/newsletter/route": "/api/newsletter",
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/pubg-cdk/page": "/pubg-cdk",
+  "/about/page": "/about",
+  "/blog/page/[page]/page": "/blog/page/[page]",
+  "/tags/[tag]/page": "/tags/[tag]",
+  "/blog/page": "/blog",
+  "/blog/[...slug]/page": "/blog/[...slug]",
+  "/projects/page": "/projects",
+  "/tags/[tag]/page/[page]/page": "/tags/[tag]/page/[page]",
+  "/tags/page": "/tags"
+}

@@ -1,0 +1,16 @@
+{
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/api/newsletter/route": "app/api/newsletter/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/pubg-cdk/page": "app/pubg-cdk/page.js",
+  "/about/page": "app/about/page.js",
+  "/blog/page/[page]/page": "app/blog/page/[page]/page.js",
+  "/tags/[tag]/page": "app/tags/[tag]/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/blog/[...slug]/page": "app/blog/[...slug]/page.js",
+  "/projects/page": "app/projects/page.js",
+  "/tags/[tag]/page/[page]/page": "app/tags/[tag]/page/[page]/page.js",
+  "/tags/page": "app/tags/page.js"
+}
